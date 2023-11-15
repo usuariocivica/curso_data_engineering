@@ -1,11 +1,11 @@
 
 {{
   config(
-    materialized='view'
+    materialized='table'
   )
 }}
 
-WITH sql_server_dbo AS (
+WITH addresses AS (
     SELECT * 
     FROM {{ source('sql_server_dbo', 'addresses') }}
     ),
@@ -16,8 +16,9 @@ renamed_casted AS (
         , ZIPCODE
         , COUNTRY
         , ADDRESS
-        , _fivetran_synced AS date_load
-    FROM sql_server_dbo
+        , _FIVETRAN_DELETED
+        , _FIVETRAN_SYNCED
+    FROM addresses
     )
 
 SELECT * FROM renamed_casted
